@@ -1,776 +1,581 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-/>
-
-<title>ChibiCat AI</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-
-    background:#ececec;
-
-    overflow:hidden;
-}
-
-/* =========================
-APP
-========================= */
-
-.app{
-
-    display:flex;
-
-    height:100vh;
-
-    width:100%;
-}
-
-/* =========================
-SIDEBAR
-========================= */
-
-.sidebar{
-
-    width:280px;
-
-    background:#121826;
-
-    color:white;
-
-    display:flex;
-
-    flex-direction:column;
-
-    padding:20px;
-
-    position:fixed;
-
-    left:-300px;
-
-    top:0;
-
-    height:100vh;
-
-    z-index:999;
-
-    transition:.3s;
-}
-
-.sidebar.active{
-
-    left:0;
-}
-
-.sidebar-header{
-
-    display:flex;
-
-    align-items:center;
-
-    margin-bottom:30px;
-}
-
-.sidebar-logo{
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#ff4fa3;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:32px;
-
-    margin-right:15px;
-}
-
-.sidebar h2{
-
-    font-size:28px;
-}
-
-.sidebar p{
-
-    color:#aaa;
-}
-
-.new-chat{
-
-    background:linear-gradient(
-        90deg,
-        #5b7cff,
-        #7a5cff
-    );
-
-    border:none;
-
-    color:white;
-
-    padding:18px;
-
-    border-radius:18px;
-
-    font-size:20px;
-
-    cursor:pointer;
-
-    margin-bottom:25px;
-}
-
-.chat-history{
-
-    flex:1;
-
-    overflow-y:auto;
-}
-
-.history-item{
-
-    background:#1d2638;
-
-    padding:18px;
-
-    border-radius:18px;
-
-    margin-bottom:15px;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.history-item:hover{
-
-    background:#293349;
-}
-
-/* =========================
-OVERLAY
-========================= */
-
-.overlay{
-
-    position:fixed;
-
-    width:100%;
-    height:100vh;
-
-    background:rgba(0,0,0,.4);
-
-    z-index:998;
-
-    display:none;
-}
-
-.overlay.active{
-
-    display:block;
-}
-
-/* =========================
-MAIN
-========================= */
-
-.main{
-
-    display:flex;
-
-    flex-direction:column;
-
-    width:100%;
-}
-
-/* =========================
-TOPBAR
-========================= */
-
-.topbar{
-
-    height:90px;
-
-    background:#ff1493;
-
-    display:flex;
-
-    align-items:center;
-
-    padding:20px;
-
-    color:white;
-}
-
-.menu-btn{
-
-    font-size:42px;
-
-    margin-right:20px;
-
-    cursor:pointer;
-}
-
-.logo{
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#ff69b4;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:35px;
-
-    margin-right:15px;
-}
-
-.title h1{
-
-    font-size:28px;
-}
-
-.title p{
-
-    font-size:18px;
-}
-
-/* =========================
-CHAT AREA
-========================= */
-
-.chat-area{
-
-    flex:1;
-
-    overflow-y:auto;
-
-    padding:20px;
-
-    background:#ececec;
-}
-
-.message{
-
-    max-width:80%;
-
-    padding:16px;
-
-    border-radius:22px;
-
-    margin-bottom:20px;
-
-    font-size:18px;
-
-    line-height:1.6;
-
-    word-wrap:break-word;
-}
-
-.bot{
-
-    background:white;
-
-    box-shadow:0 2px 5px rgba(0,0,0,.1);
-}
-
-.user{
-
-    background:#ff5ca8;
-
-    color:white;
-
-    margin-left:auto;
-}
-
-/* =========================
-INPUT
-========================= */
-
-.input-area{
-
-    display:flex;
-
-    padding:15px;
-
-    gap:10px;
-
-    background:white;
-
-    border-top:1px solid #ddd;
-}
-
-input{
-
-    flex:1;
-
-    border:none;
-
-    background:#eceff3;
-
-    border-radius:20px;
-
-    padding:18px;
-
-    font-size:18px;
-
-    outline:none;
-}
-
-button.send{
-
-    border:none;
-
-    background:#ff4fa3;
-
-    color:white;
-
-    padding:0 30px;
-
-    border-radius:20px;
-
-    font-size:20px;
-
-    cursor:pointer;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:768px){
-
-    .sidebar{
-
-        width:85%;
-    }
-
-    .title h1{
-
-        font-size:24px;
-    }
-
-    .message{
-
-        max-width:90%;
-
-        font-size:17px;
-    }
-
-    input{
-
-        font-size:16px;
-    }
-
-    button.send{
-
-        font-size:18px;
-
-        padding:0 20px;
-    }
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChibiCat AI - Neo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #0a0c15;
+            overflow: hidden;
+        }
+
+        /* =========================
+        APP
+        ========================= */
+        .app {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* =========================
+        SIDEBAR - DARK NEO
+        ========================= */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #0f111a 0%, #080a10 100%);
+            backdrop-filter: blur(10px);
+            color: #e8edff;
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px;
+            position: fixed;
+            left: -320px;
+            top: 0;
+            height: 100vh;
+            z-index: 999;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid rgba(0, 255, 255, 0.15);
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .sidebar-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-right: 15px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        /* GAMBAR LOGO UNTUK SIDEBAR */
+        .sidebar-logo-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            object-fit: cover;
+        }
+
+        .sidebar h2 {
+            font-size: 26px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #00d4ff, #4d9eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sidebar p {
+            color: #6c7a9e;
+            font-size: 13px;
+        }
+
+        .new-chat {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border: none;
+            color: #0a0c15;
+            font-weight: bold;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .new-chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: rgba(18, 22, 40, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .history-item:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.4);
+            transform: translateX(5px);
+        }
+
+        /* =========================
+        OVERLAY
+        ========================= */
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 998;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* =========================
+        MAIN - CYBER DARK
+        ========================= */
+        .main {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background: #0a0c15;
+        }
+
+        /* =========================
+        TOPBAR - NEO MASCULINE
+        ========================= */
+        .topbar {
+            height: 80px;
+            background: rgba(10, 12, 21, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            color: #e8edff;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn {
+            font-size: 28px;
+            margin-right: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #00d4ff;
+        }
+
+        .menu-btn:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 8px #00d4ff;
+        }
+
+        /* LOGO AREA - DENGAN GAMBAR */
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
+            overflow: hidden;
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        /* Fallback jika gambar tidak ada - pake icon keren */
+        .logo-icon {
+            font-size: 28px;
+        }
+
+        .title h1 {
+            font-size: 24px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #e8edff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .title p {
+            font-size: 13px;
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .title p::before {
+            content: "●";
+            font-size: 10px;
+            color: #00ff88;
+            text-shadow: 0 0 5px #00ff88;
+        }
+
+        /* =========================
+        CHAT AREA - GLASS
+        ========================= */
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(180deg, #0a0c15 0%, #0f111a 100%);
+        }
+
+        .chat-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-area::-webkit-scrollbar-track {
+            background: #1a1f2e;
+            border-radius: 10px;
+        }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 14px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bot {
+            background: rgba(20, 24, 40, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: #d0d9ff;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .user {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            color: #0a0c15;
+            font-weight: 600;
+            margin-left: auto;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* =========================
+        INPUT - CYBER
+        ========================= */
+        .input-area {
+            display: flex;
+            padding: 20px 30px;
+            gap: 15px;
+            background: rgba(10, 12, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        input {
+            flex: 1;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(18, 22, 40, 0.8);
+            border-radius: 18px;
+            padding: 16px 22px;
+            font-size: 16px;
+            outline: none;
+            color: #e8edff;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+        }
+
+        input::placeholder {
+            color: #4a5578;
+        }
+
+        button.send {
+            border: none;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            color: #0a0c15;
+            font-weight: bold;
+            padding: 0 32px;
+            border-radius: 18px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button.send:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        /* =========================
+        RESPONSIVE
+        ========================= */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 85%;
+            }
+            .message {
+                max-width: 90%;
+                font-size: 15px;
+            }
+            .topbar {
+                padding: 0 20px;
+            }
+            .input-area {
+                padding: 15px 20px;
+            }
+            button.send {
+                padding: 0 24px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div
-    class="overlay"
-    id="overlay"
-    onclick="closeSidebar()"
-></div>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="app">
 
     <!-- SIDEBAR -->
-
-    <div
-        class="sidebar"
-        id="sidebar"
-    >
-
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-
-            <div class="sidebar-logo">
-
-                🐱
-
+            <div class="sidebar-logo" id="sidebarLogo">
+                <!-- Logo akan diisi JS -->
+                🐱‍👤
             </div>
-
             <div>
-
                 <h2>ChibiCat</h2>
-
-                <p>Your cozy AI companion</p>
-
+                <p>Neo Intelligence</p>
             </div>
-
         </div>
-
-        <button
-            class="new-chat"
-            onclick="createNewChat()"
-        >
-
-            + New Chat
-
-        </button>
-
-        <div
-            class="chat-history"
-            id="chatHistory"
-        ></div>
-
+        <button class="new-chat" onclick="createNewChat()">+ New Chat</button>
+        <div class="chat-history" id="chatHistory"></div>
     </div>
 
     <!-- MAIN -->
-
     <div class="main">
-
         <!-- TOPBAR -->
-
         <div class="topbar">
-
-            <div
-                class="menu-btn"
-                onclick="openSidebar()"
-            >
-
-                ☰
-
+            <div class="menu-btn" onclick="openSidebar()">☰</div>
+            <div class="logo" id="mainLogo">
+                <!-- Logo akan diisi JS -->
+                🐱‍👤
             </div>
-
-            <div class="logo">
-
-                🐱
-
-            </div>
-
             <div class="title">
-
                 <h1>ChibiCat AI</h1>
-
-                <p>● Online</p>
-
+                <p>Online | Neo Mode</p>
             </div>
-
         </div>
 
-        <!-- CHAT -->
-
-        <div
-            class="chat-area"
-            id="chatArea"
-        >
-
+        <!-- CHAT AREA -->
+        <div class="chat-area" id="chatArea">
             <div class="message bot">
-
-                Halo teman! 😊💕
-
+                <span style="font-weight: bold;">⚡ ChibiCat Neo</span><br>
+                Halo bro! Ada yang bisa gue bantu? 🔥😎
             </div>
-
         </div>
 
         <!-- INPUT -->
-
         <div class="input-area">
-
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Ketik pesan..."
-            />
-
-            <button
-                class="send"
-                onclick="sendMessage()"
-            >
-
-                Kirim
-
+            <input type="text" id="messageInput" placeholder="Ketik pesan bro..." />
+            <button class="send" onclick="sendMessage()">
+                <span>🚀</span> Kirim
             </button>
-
         </div>
-
     </div>
-
 </div>
 
 <script>
-
-let currentChatId = null
-
-// =========================
-// SIDEBAR
-// =========================
-
-function openSidebar(){
-
-    document
-        .getElementById("sidebar")
-        .classList.add("active")
-
-    document
-        .getElementById("overlay")
-        .classList.add("active")
-}
-
-function closeSidebar(){
-
-    document
-        .getElementById("sidebar")
-        .classList.remove("active")
-
-    document
-        .getElementById("overlay")
-        .classList.remove("active")
-}
-
-// =========================
-// NEW CHAT
-// =========================
-
-async function createNewChat(){
-
-    const response =
-        await fetch("/new_chat",{
-
-            method:"POST"
-        })
-
-    const data =
-        await response.json()
-
-    currentChatId =
-        data.chat_id
-
-    document
-        .getElementById("chatArea")
-        .innerHTML = `
-            <div class="message bot">
-                Halo teman! 😊💕
-            </div>
-        `
-
-    loadChats()
-
-    closeSidebar()
-}
-
-// =========================
-// LOAD CHAT LIST
-// =========================
-
-async function loadChats(){
-
-    const response =
-        await fetch("/get_chats")
-
-    const chats =
-        await response.json()
-
-    const history =
-        document.getElementById(
-            "chatHistory"
-        )
-
-    history.innerHTML = ""
-
-    chats.forEach(chat=>{
-
-        history.innerHTML += `
-
-            <div
-                class="history-item"
-                onclick="loadChat('${chat.chat_id}')"
-            >
-
-                ${chat.title}
-
-            </div>
-        `
-    })
-}
-
-// =========================
-// LOAD CHAT
-// =========================
-
-async function loadChat(chatId){
-
-    currentChatId = chatId
-
-    const response =
-        await fetch(
-            `/load_chat/${chatId}`
-        )
-
-    const messages =
-        await response.json()
-
-    const chatArea =
-        document.getElementById(
-            "chatArea"
-        )
-
-    chatArea.innerHTML = ""
-
-    messages.forEach(msg=>{
-
-        const role =
-            msg.role === "user"
-            ? "user"
-            : "bot"
-
-        chatArea.innerHTML += `
-
-            <div class="message ${role}">
-
-                ${msg.content}
-
-            </div>
-        `
-    })
-
-    closeSidebar()
-}
-
-// =========================
-// SEND MESSAGE
-// =========================
-
-async function sendMessage(){
-
-    const input =
-        document.getElementById(
-            "messageInput"
-        )
-
-    const message =
-        input.value.trim()
-
-    if(message === "") return
-
-    const chatArea =
-        document.getElementById(
-            "chatArea"
-        )
-
-    // USER MESSAGE
-
-    chatArea.innerHTML += `
-
-        <div class="message user">
-
-            ${message}
-
-        </div>
-    `
-
-    input.value = ""
-
-    chatArea.scrollTop =
-        chatArea.scrollHeight
-
-    try{
-
-        const response =
-            await fetch("/chat",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-
-                body:JSON.stringify({
-
-                    message:message
-                })
-            })
-
-        const data =
-            await response.json()
-
-        chatArea.innerHTML += `
-
-            <div class="message bot">
-
-                ${data.reply}
-
-            </div>
-        `
-
-        chatArea.scrollTop =
-            chatArea.scrollHeight
-
-        loadChats()
-
-    }catch(error){
-
-        chatArea.innerHTML += `
-
-            <div class="message bot">
-
-                Error server 😭
-
-            </div>
-        `
+    let currentChatId = null
+
+    // =========================================
+    // KONFIGURASI LOGO
+    // =========================================
+    // Pilih salah satu mode logo:
+    // mode: "emoji" = pake emoji keren
+    // mode: "image" = pake gambar dari URL
+    // mode: "svg" = pake karakter ASCII keren
+    
+    const LOGO_CONFIG = {
+        mode: "image",  // "emoji", "image", atau "svg"
+        emoji: "🐱‍🚀",  // emoji untuk mode emoji
+        imageUrl: "/static/logo.png", // cyber cat image
+        imageUrl2: "https://cdn-icons-png.flaticon.com/512/1998/1998592.png", // alternative robot cat
+        svgIcon: "⚡🐱⚡" // untuk mode svg/ascii
     }
-}
-
-// =========================
-// ENTER KEY
-// =========================
-
-document
-.getElementById("messageInput")
-.addEventListener(
-
-    "keypress",
-
-    function(e){
-
-        if(e.key === "Enter"){
-
-            sendMessage()
+    
+    function initLogos() {
+        const sidebarLogo = document.getElementById("sidebarLogo")
+        const mainLogo = document.getElementById("mainLogo")
+        
+        if (LOGO_CONFIG.mode === "emoji") {
+            // Mode Emoji - simple tapi keren
+            sidebarLogo.innerHTML = LOGO_CONFIG.emoji
+            sidebarLogo.style.fontSize = "32px"
+            sidebarLogo.style.background = "linear-gradient(135deg, #00d4ff, #0099ff)"
+            
+            mainLogo.innerHTML = LOGO_CONFIG.emoji
+            mainLogo.style.fontSize = "28px"
+            mainLogo.style.background = "linear-gradient(135deg, #00d4ff, #0099ff)"
+            
+        } else if (LOGO_CONFIG.mode === "image") {
+            // Mode Gambar - lebih profesional
+            sidebarLogo.innerHTML = `<img src="${LOGO_CONFIG.imageUrl}" class="sidebar-logo-img" style="width:100%;height:100%;border-radius:16px;object-fit:cover;" onerror="this.src='${LOGO_CONFIG.imageUrl2}'">`
+            sidebarLogo.style.background = "transparent"
+            sidebarLogo.style.padding = "0"
+            sidebarLogo.style.boxShadow = "0 0 15px rgba(0,212,255,0.4)"
+            
+            mainLogo.innerHTML = `<img src="${LOGO_CONFIG.imageUrl}" class="logo-img" style="width:100%;height:100%;border-radius:14px;object-fit:cover;" onerror="this.src='${LOGO_CONFIG.imageUrl2}'">`
+            mainLogo.style.background = "transparent"
+            mainLogo.style.padding = "0"
+            
+        } else {
+            // Mode SVG/ASCII - modern tech look
+            sidebarLogo.innerHTML = LOGO_CONFIG.svgIcon
+            sidebarLogo.style.fontSize = "28px"
+            sidebarLogo.style.fontWeight = "bold"
+            sidebarLogo.style.letterSpacing = "2px"
+            
+            mainLogo.innerHTML = LOGO_CONFIG.svgIcon
+            mainLogo.style.fontSize = "24px"
+            mainLogo.style.fontWeight = "bold"
         }
     }
-)
 
-// =========================
-// INIT
-// =========================
+    function openSidebar() {
+        document.getElementById("sidebar").classList.add("active")
+        document.getElementById("overlay").classList.add("active")
+    }
 
-loadChats()
+    function closeSidebar() {
+        document.getElementById("sidebar").classList.remove("active")
+        document.getElementById("overlay").classList.remove("active")
+    }
 
+    async function createNewChat() {
+        const response = await fetch("/new_chat", { method: "POST" })
+        const data = await response.json()
+        currentChatId = data.chat_id
+        document.getElementById("chatArea").innerHTML = `
+            <div class="message bot">
+                <span style="font-weight: bold;">⚡ ChibiCat Neo</span><br>
+                Halo bro! Ada yang bisa gue bantu? 🔥😎
+            </div>
+        `
+        loadChats()
+        closeSidebar()
+    }
+
+    async function loadChats() {
+        const response = await fetch("/get_chats")
+        const chats = await response.json()
+        const history = document.getElementById("chatHistory")
+        history.innerHTML = ""
+        chats.forEach(chat => {
+            history.innerHTML += `
+                <div class="history-item" onclick="loadChat('${chat.chat_id}')">
+                    💬 ${chat.title}
+                </div>
+            `
+        })
+    }
+
+    async function loadChat(chatId) {
+        currentChatId = chatId
+        const response = await fetch(`/load_chat/${chatId}`)
+        const messages = await response.json()
+        const chatArea = document.getElementById("chatArea")
+        chatArea.innerHTML = ""
+        messages.forEach(msg => {
+            const role = msg.role === "user" ? "user" : "bot"
+            chatArea.innerHTML += `<div class="message ${role}">${msg.content}</div>`
+        })
+        closeSidebar()
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById("messageInput")
+        const message = input.value.trim()
+        if (message === "") return
+
+        const chatArea = document.getElementById("chatArea")
+
+        chatArea.innerHTML += `<div class="message user">${message}</div>`
+        input.value = ""
+        chatArea.scrollTop = chatArea.scrollHeight
+
+        try {
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            })
+            const data = await response.json()
+            chatArea.innerHTML += `<div class="message bot">${data.reply}</div>`
+            chatArea.scrollTop = chatArea.scrollHeight
+            loadChats()
+        } catch (error) {
+            chatArea.innerHTML += `<div class="message bot">⚠️ Server error, coba lagi bro 😭</div>`
+        }
+    }
+
+    document.getElementById("messageInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") sendMessage()
+    })
+
+    // Inisialisasi logo saat halaman load
+    initLogos()
+    loadChats()
 </script>
 
 </body>
