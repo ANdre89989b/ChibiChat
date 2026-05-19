@@ -1,20 +1,10 @@
-import os
-import uuid
-
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
 
-from flask import (
-    Flask,
-    render_template,
-    request,
-    jsonify
-)
-
-from flask_cors import CORS
-
-from huggingface_hub import (
-    InferenceClient
-)
+import os
+import uuid
 
 # ====================================
 # LOAD ENV
@@ -48,7 +38,7 @@ client = InferenceClient(
 # MODEL
 # ====================================
 
-MODEL = "meta-llama/Llama-3.3-70B-Instruct"
+MODEL = "NousResearch/Meta-Llama-3-8B-Instruct"
 
 # ====================================
 # CHAT STORAGE
@@ -58,10 +48,14 @@ chat_sessions = {}
 
 current_chat_id = None
 
+# ====================================
+# START LOG
+# ====================================
+
 print("=" * 50)
 print("🚀 ChibiCat AI")
 print("=" * 50)
-print(f"MODEL : {MODEL}")
+print(f"🦙 MODEL : {MODEL}")
 print("✅ AI READY")
 print("=" * 50)
 
@@ -194,7 +188,9 @@ def chat():
             current_chat_id
         ]
 
+        # ====================================
         # SAVE USER MESSAGE
+        # ====================================
 
         messages.append({
 
@@ -205,22 +201,11 @@ def chat():
 
         print(f"\n💬 USER: {user_message}")
 
-        print("🔥 REQUEST AI")
-
         # ====================================
-        # AI RESPONSE
+        # PROMPT
         # ====================================
 
-        completion = client.chat_completion(
-
-            model=MODEL,
-
-            messages=[
-
-                {
-                    "role": "system",
-
-                    "content": """
+        prompt = f"""
 Kamu adalah ChibiCat 🐱💕
 
 Karakteristik:
@@ -231,31 +216,38 @@ Karakteristik:
 - Bahasa Indonesia sehari-hari
 - Gunakan emoji lucu
 - Jawaban pendek dan hangat
+
+User: {user_message}
+
+Assistant:
 """
-                },
 
-                {
-                    "role": "user",
+        print("🔥 REQUEST AI")
 
-                    "content": user_message
-                }
-            ],
+        # ====================================
+        # AI RESPONSE
+        # ====================================
 
-            max_tokens=300,
+        bot_reply = client.text_generation(
 
-            temperature=0.7
+            prompt,
+
+            model=MODEL,
+
+            max_new_tokens=300,
+
+            temperature=0.7,
+
+            return_full_text=False
         )
 
-        bot_reply = (
-            completion
-            .choices[0]
-            .message
-            .content
-        )
+        bot_reply = bot_reply.strip()
 
         print(f"🤖 BOT: {bot_reply}")
 
+        # ====================================
         # SAVE BOT MESSAGE
+        # ====================================
 
         messages.append({
 
@@ -303,6 +295,19 @@ def health():
 # ====================================
 
 if __name__ == "__main__":
+
+    print("=" * 50)
+    print("🐱 ChibiCat AI Server")
+    print("=" * 50)
+
+    print("🌐 LOCAL:")
+    print("http://127.0.0.1:5000")
+
+    print("")
+    print("☁️ RENDER:")
+    print("https://chibichat.onrender.com")
+
+    print("=" * 50)
 
     app.run(
 
