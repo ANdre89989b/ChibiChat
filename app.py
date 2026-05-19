@@ -19,7 +19,7 @@ client = InferenceClient(
 )
 
 # MODEL
-MODEL = "meta-llama/Llama-3.3-70B-Instruct"
+MODEL = MODEL = "NousResearch/Meta-Llama-3-8B-Instruct"
 
 print("=" * 50)
 print(f"🦙 Model: {MODEL}")
