@@ -4,53 +4,60 @@ from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
 import os
 
-# Load .env
+# Load environment
 load_dotenv()
 
+# Flask app
 app = Flask(__name__)
 CORS(app)
 
-# API KEY dari .env
+# HuggingFace API KEY
 HF_API_KEY = os.getenv("HF_API_KEY")
 
-# Inference Client
-client = InferenceClient(token=HF_API_KEY)
+# HuggingFace Client
+client = InferenceClient(
+    token=HF_API_KEY
+)
 
-# Model AI
-MODEL = "meta-llama/Llama-3.3-70B-Instruct"
+# MODEL AI
+MODEL = "meta-llama/Meta-Llama-3-8B-Instruct"
 
 print("=" * 50)
-print(f"🤖 Model: {MODEL}")
-print("✅ InferenceClient siap digunakan!")
+print(f"🤖 MODEL: {MODEL}")
+print("✅ Nyara AI siap digunakan!")
 print("=" * 50)
 
 
-def chat_with_qwen(user_message):
-    """
-    Kirim pesan ke Qwen via HuggingFace
-    """
+def chat_with_ai(user_message):
 
     try:
+
         messages = [
+
             {
                 "role": "system",
+
                 "content": """
-Kamu adalah ChibiCat, seekor kucing pink lucu dan imut 🐱💕
+Kamu adalah Nyara AI 🐱✨
 
 Karakteristik:
-- Ceria
-- Positif
 - Ramah
-- Jawaban santai
+- Santai
+- Ceria
+- Natural
 - Bahasa Indonesia sehari-hari
-- Gunakan emoji lucu
+- Gunakan emoji secukupnya
+- Jawaban tidak terlalu formal
+- Jangan terlalu panjang
 
 Contoh:
-- "Halo teman! Ada yang bisa aku bantu? 😊💕"
-- "Semangat ya kamu pasti bisa! 💪🐱"
-- "Aku senang ngobrol sama kamu~ ✨"
+- "Halo teman 😊"
+- "Aku bantu ya ✨"
+- "Wah menarik banget 🐱"
+- "Semangat ya 💪"
 """
             },
+
             {
                 "role": "user",
                 "content": user_message
@@ -58,9 +65,13 @@ Contoh:
         ]
 
         completion = client.chat.completions.create(
+
             model=MODEL,
+
             messages=messages,
+
             max_tokens=300,
+
             temperature=0.7
         )
 
@@ -69,51 +80,67 @@ Contoh:
         return answer.strip()
 
     except Exception as e:
-        print(f"❌ Error: {e}")
-        return None
+
+        print("=" * 50)
+        print("❌ FULL ERROR:")
+        print(e)
+        print("=" * 50)
+
+        return f"⚠️ Error server:\n{str(e)}"
 
 
 # Homepage
 @app.route('/')
 def index():
-    return render_template('index.html')
+
+    return render_template(
+        'index.html'
+    )
 
 
-# Chat API
+# Chat Endpoint
 @app.route('/chat', methods=['POST'])
 def chat():
 
     try:
+
         data = request.get_json()
 
-        user_message = data.get('message', '').strip()
+        user_message = data.get(
+            'message',
+            ''
+        ).strip()
 
         if not user_message:
+
             return jsonify({
                 'error': 'Pesan kosong'
             }), 400
 
-        print(f"\n💬 User: {user_message}")
+        print(f"\n💬 USER: {user_message}")
 
-        response = chat_with_qwen(user_message)
+        response = chat_with_ai(
+            user_message
+        )
 
-        if response:
-            print(f"🤖 Bot: {response}")
-
-            return jsonify({
-                'response': response
-            })
-
-        else:
-            return jsonify({
-                'response': 'Maaf aku lagi sibuk 🥺'
-            }), 500
-
-    except Exception as e:
-        print(f"❌ API Error: {e}")
+        print(f"🤖 BOT: {response}")
 
         return jsonify({
-            'response': 'Terjadi error server'
+            'response': response
+        })
+
+    except Exception as e:
+
+        print("=" * 50)
+        print("❌ API ERROR:")
+        print(e)
+        print("=" * 50)
+
+        return jsonify({
+
+            'response':
+            f'❌ Server Error:\n{str(e)}'
+
         }), 500
 
 
@@ -122,22 +149,27 @@ def chat():
 def health():
 
     return jsonify({
+
         'status': 'online',
+
         'model': MODEL
     })
 
 
-# Run Flask
+# Run Server
 if __name__ == '__main__':
 
     print("=" * 50)
-    print("🐱 ChibiCat AI Server")
+    print("🐱 Nyara AI Server")
     print("=" * 50)
+
     print("🌐 Local URL:")
     print("http://127.0.0.1:5000")
+
     print("")
-    print("📱 Android WebView URL:")
+    print("📱 Android URL:")
     print("http://192.168.18.68:5000")
+
     print("=" * 50)
 
     app.run(
