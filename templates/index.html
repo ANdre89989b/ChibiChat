@@ -6,11 +6,8 @@
 
 <meta
     name="viewport"
-    content="
-        width=device-width,
-        initial-scale=1.0,
-        maximum-scale=1.0,
-        user-scalable=no">
+    content="width=device-width, initial-scale=1.0"
+/>
 
 <title>ChibiCat AI</title>
 
@@ -20,30 +17,38 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+    font-family:Arial,sans-serif;
 }
 
-html,body{
-    width:100%;
-    height:100%;
+body{
+
+    background:#ececec;
+
     overflow:hidden;
-    font-family:'Segoe UI',sans-serif;
-    background:#111827;
 }
+
+/* =========================
+APP
+========================= */
 
 .app{
+
     display:flex;
+
+    height:100vh;
+
     width:100%;
-    height:100dvh;
 }
 
-/* Sidebar */
+/* =========================
+SIDEBAR
+========================= */
 
 .sidebar{
 
     width:280px;
 
-    background:#0f172a;
+    background:#121826;
 
     color:white;
 
@@ -51,47 +56,43 @@ html,body{
 
     flex-direction:column;
 
+    padding:20px;
+
     position:fixed;
 
+    left:-300px;
+
     top:0;
-    left:-280px;
 
-    height:100%;
+    height:100vh;
 
-    z-index:1000;
+    z-index:999;
 
-    transition:0.3s;
+    transition:.3s;
 }
 
 .sidebar.active{
+
     left:0;
 }
 
 .sidebar-header{
 
-    padding:20px;
-
-    border-bottom:1px solid #1e293b;
-
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    margin-bottom:30px;
 }
 
-.logo{
+.sidebar-logo{
 
-    width:58px;
-    height:58px;
+    width:60px;
+    height:60px;
 
-    border-radius:18px;
+    border-radius:50%;
 
-    background:linear-gradient(
-        135deg,
-        #4f46e5,
-        #7c3aed
-    );
+    background:#ff4fa3;
 
     display:flex;
 
@@ -99,93 +100,99 @@ html,body{
 
     justify-content:center;
 
-    font-size:30px;
+    font-size:32px;
+
+    margin-right:15px;
 }
 
-.header-text h1{
-    font-size:20px;
+.sidebar h2{
+
+    font-size:28px;
 }
 
-.header-text p{
-    font-size:13px;
-    opacity:0.7;
+.sidebar p{
+
+    color:#aaa;
 }
 
-.new-chat-btn{
+.new-chat{
 
-    margin:16px;
+    background:linear-gradient(
+        90deg,
+        #5b7cff,
+        #7a5cff
+    );
 
     border:none;
 
-    background:linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
-
     color:white;
 
-    padding:16px;
+    padding:18px;
 
     border-radius:18px;
 
     font-size:20px;
 
     cursor:pointer;
+
+    margin-bottom:25px;
 }
 
-.history{
+.chat-history{
 
     flex:1;
 
     overflow-y:auto;
-
-    padding:10px;
 }
 
 .history-item{
 
-    padding:14px;
+    background:#1d2638;
 
-    background:#1e293b;
+    padding:18px;
 
-    border-radius:16px;
+    border-radius:18px;
 
-    margin-bottom:12px;
+    margin-bottom:15px;
 
     cursor:pointer;
 
-    transition:0.2s;
+    transition:.2s;
 }
 
 .history-item:hover{
-    background:#334155;
+
+    background:#293349;
 }
 
-/* Overlay */
+/* =========================
+OVERLAY
+========================= */
 
 .overlay{
 
     position:fixed;
 
-    inset:0;
+    width:100%;
+    height:100vh;
 
-    background:rgba(0,0,0,0.4);
+    background:rgba(0,0,0,.4);
 
-    z-index:999;
+    z-index:998;
 
     display:none;
 }
 
 .overlay.active{
+
     display:block;
 }
 
-/* Main */
+/* =========================
+MAIN
+========================= */
 
 .main{
-
-    flex:1;
 
     display:flex;
 
@@ -194,289 +201,320 @@ html,body{
     width:100%;
 }
 
-/* Header */
+/* =========================
+TOPBAR
+========================= */
 
-.chat-header{
+.topbar{
 
-    background:linear-gradient(
-        135deg,
-        #ff69b4,
-        #ff1493
-    );
+    height:90px;
 
-    padding:16px;
+    background:#ff1493;
 
     display:flex;
 
     align-items:center;
 
-    gap:14px;
+    padding:20px;
 
     color:white;
 }
 
 .menu-btn{
 
-    font-size:28px;
+    font-size:42px;
+
+    margin-right:20px;
 
     cursor:pointer;
 }
 
-.avatar{
+.logo{
 
-    width:52px;
-    height:52px;
+    width:60px;
+    height:60px;
 
     border-radius:50%;
 
-    background:rgba(255,255,255,0.2);
+    background:#ff69b4;
 
     display:flex;
 
     align-items:center;
+
     justify-content:center;
+
+    font-size:35px;
+
+    margin-right:15px;
+}
+
+.title h1{
 
     font-size:28px;
 }
 
-.header-info h1{
-    font-size:24px;
+.title p{
+
+    font-size:18px;
 }
 
-.status{
-    font-size:13px;
-}
+/* =========================
+CHAT AREA
+========================= */
 
-/* Messages */
-
-.chat-messages{
+.chat-area{
 
     flex:1;
 
     overflow-y:auto;
 
-    padding:16px;
+    padding:20px;
 
-    background:#f5f5f5;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
+    background:#ececec;
 }
 
 .message{
-    display:flex;
-}
 
-.user-message{
-    justify-content:flex-end;
-}
+    max-width:80%;
 
-.bot-message{
-    justify-content:flex-start;
-}
+    padding:16px;
 
-.message-content{
+    border-radius:22px;
 
-    max-width:85%;
+    margin-bottom:20px;
 
-    padding:12px 16px;
+    font-size:18px;
 
-    border-radius:18px;
-
-    line-height:1.5;
-
-    font-size:16px;
+    line-height:1.6;
 
     word-wrap:break-word;
 }
 
-.user-message .message-content{
+.bot{
 
-    background:#ff69b4;
+    background:white;
+
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+
+.user{
+
+    background:#ff5ca8;
 
     color:white;
 
-    border-bottom-right-radius:5px;
+    margin-left:auto;
 }
 
-.bot-message .message-content{
-
-    background:white;
-
-    color:#333;
-
-    border-bottom-left-radius:5px;
-
-    box-shadow:0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* Input */
-
-.chat-input{
-
-    background:white;
-
-    padding:12px;
-
-    border-top:1px solid #ddd;
-}
+/* =========================
+INPUT
+========================= */
 
 .input-area{
 
     display:flex;
 
+    padding:15px;
+
     gap:10px;
+
+    background:white;
+
+    border-top:1px solid #ddd;
 }
 
-.input-area input{
+input{
 
     flex:1;
 
     border:none;
 
-    background:#f1f5f9;
+    background:#eceff3;
 
-    border-radius:16px;
+    border-radius:20px;
 
-    padding:14px;
+    padding:18px;
 
-    font-size:16px;
+    font-size:18px;
 
     outline:none;
 }
 
-.input-area button{
+button.send{
 
     border:none;
 
-    background:#ec4899;
+    background:#ff4fa3;
 
     color:white;
 
-    border-radius:16px;
+    padding:0 30px;
 
-    padding:0 22px;
+    border-radius:20px;
 
-    font-size:16px;
-
-    font-weight:bold;
+    font-size:20px;
 
     cursor:pointer;
 }
 
-.footer{
+/* =========================
+MOBILE
+========================= */
 
-    text-align:center;
+@media(max-width:768px){
 
-    font-size:11px;
+    .sidebar{
 
-    color:#999;
+        width:85%;
+    }
 
-    margin-top:8px;
-}
+    .title h1{
 
-.typing{
-    opacity:0.7;
-    font-style:italic;
+        font-size:24px;
+    }
+
+    .message{
+
+        max-width:90%;
+
+        font-size:17px;
+    }
+
+    input{
+
+        font-size:16px;
+    }
+
+    button.send{
+
+        font-size:18px;
+
+        padding:0 20px;
+    }
 }
 
 </style>
+
 </head>
 
 <body>
 
+<div
+    class="overlay"
+    id="overlay"
+    onclick="closeSidebar()"
+></div>
+
 <div class="app">
 
-    <div class="sidebar" id="sidebar">
+    <!-- SIDEBAR -->
+
+    <div
+        class="sidebar"
+        id="sidebar"
+    >
 
         <div class="sidebar-header">
 
-            <div class="logo">
+            <div class="sidebar-logo">
+
                 🐱
+
             </div>
 
-            <div class="header-text">
-                <h1>ChibiCat</h1>
+            <div>
+
+                <h2>ChibiCat</h2>
+
                 <p>Your cozy AI companion</p>
+
             </div>
 
         </div>
 
         <button
-            class="new-chat-btn"
-            id="newChatBtn">
+            class="new-chat"
+            onclick="createNewChat()"
+        >
 
             + New Chat
+
         </button>
 
         <div
-            class="history"
-            id="history">
-        </div>
+            class="chat-history"
+            id="chatHistory"
+        ></div>
 
     </div>
 
-    <div
-        class="overlay"
-        id="overlay">
-    </div>
+    <!-- MAIN -->
 
     <div class="main">
 
-        <div class="chat-header">
+        <!-- TOPBAR -->
+
+        <div class="topbar">
 
             <div
                 class="menu-btn"
-                id="menuBtn">
+                onclick="openSidebar()"
+            >
 
                 ☰
+
             </div>
 
-            <div class="avatar">
+            <div class="logo">
+
                 🐱
+
             </div>
 
-            <div class="header-info">
+            <div class="title">
 
                 <h1>ChibiCat AI</h1>
 
-                <div class="status">
-                    ● Online
-                </div>
+                <p>● Online</p>
 
             </div>
 
         </div>
+
+        <!-- CHAT -->
 
         <div
-            class="chat-messages"
-            id="chatMessages">
+            class="chat-area"
+            id="chatArea"
+        >
+
+            <div class="message bot">
+
+                Halo teman! 😊💕
+
+            </div>
 
         </div>
 
-        <div class="chat-input">
+        <!-- INPUT -->
 
-            <div class="input-area">
+        <div class="input-area">
 
-                <input
-                    type="text"
-                    id="userInput"
-                    placeholder="Ketik pesan...">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Ketik pesan..."
+            />
 
-                <button
-                    id="sendBtn">
+            <button
+                class="send"
+                onclick="sendMessage()"
+            >
 
-                    Kirim
-                </button>
+                Kirim
 
-            </div>
-
-            <div class="footer">
-                Powered by Qwen 2.5 🚀
-            </div>
+            </button>
 
         </div>
 
@@ -486,133 +524,184 @@ html,body{
 
 <script>
 
-class ChibiCat {
+let currentChatId = null
 
-    constructor(){
+// =========================
+// SIDEBAR
+// =========================
 
-        this.chatMessages =
-            document.getElementById(
-                "chatMessages"
-            );
+function openSidebar(){
 
-        this.userInput =
-            document.getElementById(
-                "userInput"
-            );
+    document
+        .getElementById("sidebar")
+        .classList.add("active")
 
-        this.sendBtn =
-            document.getElementById(
-                "sendBtn"
-            );
+    document
+        .getElementById("overlay")
+        .classList.add("active")
+}
 
-        this.menuBtn =
-            document.getElementById(
-                "menuBtn"
-            );
+function closeSidebar(){
 
-        this.sidebar =
-            document.getElementById(
-                "sidebar"
-            );
+    document
+        .getElementById("sidebar")
+        .classList.remove("active")
 
-        this.overlay =
-            document.getElementById(
-                "overlay"
-            );
+    document
+        .getElementById("overlay")
+        .classList.remove("active")
+}
 
-        this.historyContainer =
-            document.getElementById(
-                "history"
-            );
+// =========================
+// NEW CHAT
+// =========================
 
-        this.newChatBtn =
-            document.getElementById(
-                "newChatBtn"
-            );
+async function createNewChat(){
 
-        this.chatHistory = [];
+    const response =
+        await fetch("/new_chat",{
 
-        this.init();
-    }
+            method:"POST"
+        })
 
-    init(){
+    const data =
+        await response.json()
 
-        this.loadHistory();
+    currentChatId =
+        data.chat_id
 
-        this.sendBtn.addEventListener(
-            "click",
-            () => this.sendMessage()
-        );
+    document
+        .getElementById("chatArea")
+        .innerHTML = `
+            <div class="message bot">
+                Halo teman! 😊💕
+            </div>
+        `
 
-        this.userInput.addEventListener(
-            "keypress",
-            (e)=>{
+    loadChats()
 
-                if(e.key==="Enter"){
-                    this.sendMessage();
-                }
+    closeSidebar()
+}
 
-            }
-        );
+// =========================
+// LOAD CHAT LIST
+// =========================
 
-        this.menuBtn.addEventListener(
-            "click",
-            ()=>this.openSidebar()
-        );
+async function loadChats(){
 
-        this.overlay.addEventListener(
-            "click",
-            ()=>this.closeSidebar()
-        );
+    const response =
+        await fetch("/get_chats")
 
-        this.newChatBtn.addEventListener(
-            "click",
-            ()=>this.newChat()
-        );
-    }
+    const chats =
+        await response.json()
 
-    openSidebar(){
+    const history =
+        document.getElementById(
+            "chatHistory"
+        )
 
-        this.sidebar.classList.add(
-            "active"
-        );
+    history.innerHTML = ""
 
-        this.overlay.classList.add(
-            "active"
-        );
-    }
+    chats.forEach(chat=>{
 
-    closeSidebar(){
+        history.innerHTML += `
 
-        this.sidebar.classList.remove(
-            "active"
-        );
+            <div
+                class="history-item"
+                onclick="loadChat('${chat.chat_id}')"
+            >
 
-        this.overlay.classList.remove(
-            "active"
-        );
-    }
+                ${chat.title}
 
-    async sendMessage(){
+            </div>
+        `
+    })
+}
 
-        const message =
-            this.userInput.value.trim();
+// =========================
+// LOAD CHAT
+// =========================
 
-        if(!message) return;
+async function loadChat(chatId){
 
-        this.addMessage(
-            message,
-            "user"
-        );
+    currentChatId = chatId
 
-        this.userInput.value = "";
+    const response =
+        await fetch(
+            `/load_chat/${chatId}`
+        )
 
-        this.showTyping();
+    const messages =
+        await response.json()
 
-        try{
+    const chatArea =
+        document.getElementById(
+            "chatArea"
+        )
 
-            const response =
-                await fetch("/chat",{
+    chatArea.innerHTML = ""
+
+    messages.forEach(msg=>{
+
+        const role =
+            msg.role === "user"
+            ? "user"
+            : "bot"
+
+        chatArea.innerHTML += `
+
+            <div class="message ${role}">
+
+                ${msg.content}
+
+            </div>
+        `
+    })
+
+    closeSidebar()
+}
+
+// =========================
+// SEND MESSAGE
+// =========================
+
+async function sendMessage(){
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        )
+
+    const message =
+        input.value.trim()
+
+    if(message === "") return
+
+    const chatArea =
+        document.getElementById(
+            "chatArea"
+        )
+
+    // USER MESSAGE
+
+    chatArea.innerHTML += `
+
+        <div class="message user">
+
+            ${message}
+
+        </div>
+    `
+
+    input.value = ""
+
+    chatArea.scrollTop =
+        chatArea.scrollHeight
+
+    try{
+
+        const response =
+            await fetch("/chat",{
 
                 method:"POST",
 
@@ -622,224 +711,65 @@ class ChibiCat {
                 },
 
                 body:JSON.stringify({
+
                     message:message
                 })
+            })
 
-            });
+        const data =
+            await response.json()
 
-            const data =
-                await response.json();
+        chatArea.innerHTML += `
 
-            this.removeTyping();
+            <div class="message bot">
 
-            this.addMessage(
-                data.response,
-                "bot"
-            );
+                ${data.reply}
 
-            this.saveHistory(message);
-
-        }catch{
-
-            this.removeTyping();
-
-            this.addMessage(
-                "Server offline 🥺",
-                "bot"
-            );
-        }
-    }
-
-    addMessage(text,sender){
-
-        const message =
-            document.createElement("div");
-
-        message.className =
-            `message ${sender}-message`;
-
-        message.innerHTML = `
-            <div class="message-content">
-                ${text.replace(/\n/g,"<br>")}
             </div>
-        `;
+        `
 
-        this.chatMessages.appendChild(
-            message
-        );
+        chatArea.scrollTop =
+            chatArea.scrollHeight
 
-        this.scrollBottom();
-    }
+        loadChats()
 
-    showTyping(){
+    }catch(error){
 
-        const typing =
-            document.createElement("div");
+        chatArea.innerHTML += `
 
-        typing.id = "typing";
+            <div class="message bot">
 
-        typing.className =
-            "message bot-message";
+                Error server 😭
 
-        typing.innerHTML = `
-            <div class="message-content typing">
-                ChibiCat sedang mengetik...
             </div>
-        `;
-
-        this.chatMessages.appendChild(
-            typing
-        );
-
-        this.scrollBottom();
-    }
-
-    removeTyping(){
-
-        const typing =
-            document.getElementById(
-                "typing"
-            );
-
-        if(typing){
-            typing.remove();
-        }
-    }
-
-    scrollBottom(){
-
-        this.chatMessages.scrollTop =
-            this.chatMessages.scrollHeight;
-    }
-
-    newChat(){
-
-        this.chatMessages.innerHTML = "";
-
-        this.addMessage(
-            "Halo! Chat baru dimulai 💕",
-            "bot"
-        );
-
-        this.closeSidebar();
-    }
-
-    saveHistory(lastMessage){
-
-        const text =
-            this.chatMessages.innerHTML;
-
-        const historyItem = {
-
-            title:
-                lastMessage.substring(0,40),
-
-            content:text,
-
-            time:new Date().toLocaleTimeString(
-                "id-ID",
-                {
-                    hour:"2-digit",
-                    minute:"2-digit"
-                }
-            )
-        };
-
-        this.chatHistory.unshift(
-            historyItem
-        );
-
-        localStorage.setItem(
-            "chibicat_history",
-            JSON.stringify(this.chatHistory)
-        );
-
-        this.renderHistory();
-    }
-
-    loadHistory(){
-
-        const saved =
-            localStorage.getItem(
-                "chibicat_history"
-            );
-
-        if(saved){
-
-            this.chatHistory =
-                JSON.parse(saved);
-
-            if(!Array.isArray(this.chatHistory)){
-                this.chatHistory = [];
-            }
-
-            this.renderHistory();
-        }
-
-        this.addMessage(
-            "Halo teman! 😊💕",
-            "bot"
-        );
-    }
-
-    renderHistory(){
-
-        this.historyContainer.innerHTML = "";
-
-        this.chatHistory.forEach(
-            (chat,index)=>{
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "history-item";
-
-            item.innerHTML = `
-
-                <div style="
-                    font-size:15px;
-                    font-weight:600;
-                    margin-bottom:6px;
-                    overflow:hidden;
-                    text-overflow:ellipsis;
-                    white-space:nowrap;
-                ">
-                    ${chat.title}
-                </div>
-
-                <div style="
-                    font-size:11px;
-                    opacity:0.7;
-                ">
-                    ${chat.time}
-                </div>
-
-            `;
-
-            item.onclick = ()=>{
-
-                this.chatMessages.innerHTML =
-                    chat.content;
-
-                this.closeSidebar();
-            };
-
-            this.historyContainer.appendChild(
-                item
-            );
-        });
+        `
     }
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    ()=>{
+// =========================
+// ENTER KEY
+// =========================
 
-        new ChibiCat();
+document
+.getElementById("messageInput")
+.addEventListener(
 
+    "keypress",
+
+    function(e){
+
+        if(e.key === "Enter"){
+
+            sendMessage()
+        }
     }
-);
+)
+
+// =========================
+// INIT
+// =========================
+
+loadChats()
 
 </script>
 
