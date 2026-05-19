@@ -14,7 +14,7 @@ CORS(app)
 HF_API_KEY = os.getenv("HF_API_KEY")
 
 # Inference Client
-client = InferenceClient(api_key=HF_API_KEY)
+client = InferenceClient(token=HF_API_KEY)
 
 # Model AI
 MODEL = "meta-llama/Llama-3.3-70B-Instruct"
