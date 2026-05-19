@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="
+        width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no">
+
+<title>ChibiCat AI</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Segoe UI',sans-serif;
+    background:#111827;
+}
+
+.app{
+    display:flex;
+    width:100%;
+    height:100dvh;
+}
+
+/* Sidebar */
+
+.sidebar{
+
+    width:280px;
+
+    background:#0f172a;
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:fixed;
+
+    top:0;
+    left:-280px;
+
+    height:100%;
+
+    z-index:1000;
+
+    transition:0.3s;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar-header{
+
+    padding:20px;
+
+    border-bottom:1px solid #1e293b;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.logo{
+
+    width:58px;
+    height:58px;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:30px;
+}
+
+.header-text h1{
+    font-size:20px;
+}
+
+.header-text p{
+    font-size:13px;
+    opacity:0.7;
+}
+
+.new-chat-btn{
+
+    margin:16px;
+
+    border:none;
+
+    background:linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    color:white;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+.history{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:10px;
+}
+
+.history-item{
+
+    padding:14px;
+
+    background:#1e293b;
+
+    border-radius:16px;
+
+    margin-bottom:12px;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.history-item:hover{
+    background:#334155;
+}
+
+/* Overlay */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.4);
+
+    z-index:999;
+
+    display:none;
+}
+
+.overlay.active{
+    display:block;
+}
+
+/* Main */
+
+.main{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+}
+
+/* Header */
+
+.chat-header{
+
+    background:linear-gradient(
+        135deg,
+        #ff69b4,
+        #ff1493
+    );
+
+    padding:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    color:white;
+}
+
+.menu-btn{
+
+    font-size:28px;
+
+    cursor:pointer;
+}
+
+.avatar{
+
+    width:52px;
+    height:52px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,0.2);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+}
+
+.header-info h1{
+    font-size:24px;
+}
+
+.status{
+    font-size:13px;
+}
+
+/* Messages */
+
+.chat-messages{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:16px;
+
+    background:#f5f5f5;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.message{
+    display:flex;
+}
+
+.user-message{
+    justify-content:flex-end;
+}
+
+.bot-message{
+    justify-content:flex-start;
+}
+
+.message-content{
+
+    max-width:85%;
+
+    padding:12px 16px;
+
+    border-radius:18px;
+
+    line-height:1.5;
+
+    font-size:16px;
+
+    word-wrap:break-word;
+}
+
+.user-message .message-content{
+
+    background:#ff69b4;
+
+    color:white;
+
+    border-bottom-right-radius:5px;
+}
+
+.bot-message .message-content{
+
+    background:white;
+
+    color:#333;
+
+    border-bottom-left-radius:5px;
+
+    box-shadow:0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Input */
+
+.chat-input{
+
+    background:white;
+
+    padding:12px;
+
+    border-top:1px solid #ddd;
+}
+
+.input-area{
+
+    display:flex;
+
+    gap:10px;
+}
+
+.input-area input{
+
+    flex:1;
+
+    border:none;
+
+    background:#f1f5f9;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+.input-area button{
+
+    border:none;
+
+    background:#ec4899;
+
+    color:white;
+
+    border-radius:16px;
+
+    padding:0 22px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.footer{
+
+    text-align:center;
+
+    font-size:11px;
+
+    color:#999;
+
+    margin-top:8px;
+}
+
+.typing{
+    opacity:0.7;
+    font-style:italic;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="logo">
+                🐱
+            </div>
+
+            <div class="header-text">
+                <h1>ChibiCat</h1>
+                <p>Your cozy AI companion</p>
+            </div>
+
+        </div>
+
+        <button
+            class="new-chat-btn"
+            id="newChatBtn">
+
+            + New Chat
+        </button>
+
+        <div
+            class="history"
+            id="history">
+        </div>
+
+    </div>
+
+    <div
+        class="overlay"
+        id="overlay">
+    </div>
+
+    <div class="main">
+
+        <div class="chat-header">
+
+            <div
+                class="menu-btn"
+                id="menuBtn">
+
+                ☰
+            </div>
+
+            <div class="avatar">
+                🐱
+            </div>
+
+            <div class="header-info">
+
+                <h1>ChibiCat AI</h1>
+
+                <div class="status">
+                    ● Online
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            class="chat-messages"
+            id="chatMessages">
+
+        </div>
+
+        <div class="chat-input">
+
+            <div class="input-area">
+
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Ketik pesan...">
+
+                <button
+                    id="sendBtn">
+
+                    Kirim
+                </button>
+
+            </div>
+
+            <div class="footer">
+                Powered by Qwen 2.5 🚀
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+class ChibiCat {
+
+    constructor(){
+
+        this.chatMessages =
+            document.getElementById(
+                "chatMessages"
+            );
+
+        this.userInput =
+            document.getElementById(
+                "userInput"
+            );
+
+        this.sendBtn =
+            document.getElementById(
+                "sendBtn"
+            );
+
+        this.menuBtn =
+            document.getElementById(
+                "menuBtn"
+            );
+
+        this.sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+        this.overlay =
+            document.getElementById(
+                "overlay"
+            );
+
+        this.historyContainer =
+            document.getElementById(
+                "history"
+            );
+
+        this.newChatBtn =
+            document.getElementById(
+                "newChatBtn"
+            );
+
+        this.chatHistory = [];
+
+        this.init();
+    }
+
+    init(){
+
+        this.loadHistory();
+
+        this.sendBtn.addEventListener(
+            "click",
+            () => this.sendMessage()
+        );
+
+        this.userInput.addEventListener(
+            "keypress",
+            (e)=>{
+
+                if(e.key==="Enter"){
+                    this.sendMessage();
+                }
+
+            }
+        );
+
+        this.menuBtn.addEventListener(
+            "click",
+            ()=>this.openSidebar()
+        );
+
+        this.overlay.addEventListener(
+            "click",
+            ()=>this.closeSidebar()
+        );
+
+        this.newChatBtn.addEventListener(
+            "click",
+            ()=>this.newChat()
+        );
+    }
+
+    openSidebar(){
+
+        this.sidebar.classList.add(
+            "active"
+        );
+
+        this.overlay.classList.add(
+            "active"
+        );
+    }
+
+    closeSidebar(){
+
+        this.sidebar.classList.remove(
+            "active"
+        );
+
+        this.overlay.classList.remove(
+            "active"
+        );
+    }
+
+    async sendMessage(){
+
+        const message =
+            this.userInput.value.trim();
+
+        if(!message) return;
+
+        this.addMessage(
+            message,
+            "user"
+        );
+
+        this.userInput.value = "";
+
+        this.showTyping();
+
+        try{
+
+            const response =
+                await fetch("/chat",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+                    message:message
+                })
+
+            });
+
+            const data =
+                await response.json();
+
+            this.removeTyping();
+
+            this.addMessage(
+                data.response,
+                "bot"
+            );
+
+            this.saveHistory(message);
+
+        }catch{
+
+            this.removeTyping();
+
+            this.addMessage(
+                "Server offline 🥺",
+                "bot"
+            );
+        }
+    }
+
+    addMessage(text,sender){
+
+        const message =
+            document.createElement("div");
+
+        message.className =
+            `message ${sender}-message`;
+
+        message.innerHTML = `
+            <div class="message-content">
+                ${text.replace(/\n/g,"<br>")}
+            </div>
+        `;
+
+        this.chatMessages.appendChild(
+            message
+        );
+
+        this.scrollBottom();
+    }
+
+    showTyping(){
+
+        const typing =
+            document.createElement("div");
+
+        typing.id = "typing";
+
+        typing.className =
+            "message bot-message";
+
+        typing.innerHTML = `
+            <div class="message-content typing">
+                ChibiCat sedang mengetik...
+            </div>
+        `;
+
+        this.chatMessages.appendChild(
+            typing
+        );
+
+        this.scrollBottom();
+    }
+
+    removeTyping(){
+
+        const typing =
+            document.getElementById(
+                "typing"
+            );
+
+        if(typing){
+            typing.remove();
+        }
+    }
+
+    scrollBottom(){
+
+        this.chatMessages.scrollTop =
+            this.chatMessages.scrollHeight;
+    }
+
+    newChat(){
+
+        this.chatMessages.innerHTML = "";
+
+        this.addMessage(
+            "Halo! Chat baru dimulai 💕",
+            "bot"
+        );
+
+        this.closeSidebar();
+    }
+
+    saveHistory(lastMessage){
+
+        const text =
+            this.chatMessages.innerHTML;
+
+        const historyItem = {
+
+            title:
+                lastMessage.substring(0,40),
+
+            content:text,
+
+            time:new Date().toLocaleTimeString(
+                "id-ID",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            )
+        };
+
+        this.chatHistory.unshift(
+            historyItem
+        );
+
+        localStorage.setItem(
+            "chibicat_history",
+            JSON.stringify(this.chatHistory)
+        );
+
+        this.renderHistory();
+    }
+
+    loadHistory(){
+
+        const saved =
+            localStorage.getItem(
+                "chibicat_history"
+            );
+
+        if(saved){
+
+            this.chatHistory =
+                JSON.parse(saved);
+
+            if(!Array.isArray(this.chatHistory)){
+                this.chatHistory = [];
+            }
+
+            this.renderHistory();
+        }
+
+        this.addMessage(
+            "Halo teman! 😊💕",
+            "bot"
+        );
+    }
+
+    renderHistory(){
+
+        this.historyContainer.innerHTML = "";
+
+        this.chatHistory.forEach(
+            (chat,index)=>{
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "history-item";
+
+            item.innerHTML = `
+
+                <div style="
+                    font-size:15px;
+                    font-weight:600;
+                    margin-bottom:6px;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+                    white-space:nowrap;
+                ">
+                    ${chat.title}
+                </div>
+
+                <div style="
+                    font-size:11px;
+                    opacity:0.7;
+                ">
+                    ${chat.time}
+                </div>
+
+            `;
+
+            item.onclick = ()=>{
+
+                this.chatMessages.innerHTML =
+                    chat.content;
+
+                this.closeSidebar();
+            };
+
+            this.historyContainer.appendChild(
+                item
+            );
+        });
+    }
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        new ChibiCat();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

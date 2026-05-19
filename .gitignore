@@ -1,0 +1,22 @@
+# ENV
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
+
+# Build
+build/
+dist/
+
+# Android
+.gradle/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
