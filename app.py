@@ -9,6 +9,20 @@ import uuid
 app = Flask(__name__)
 
 # =========================
+# TAMBAHAN: DEBUG TOKEN
+# =========================
+HF_TOKEN = os.getenv("HF_TOKEN")
+print("=" * 50)
+print("🔑 CEK TOKEN HUGGINGFACE")
+print("=" * 50)
+if HF_TOKEN:
+    print(f"✅ TOKEN DITEMUKAN: {HF_TOKEN[:15]}...")
+else:
+    print("❌ TOKEN TIDAK DITEMUKAN!")
+    print("Pastikan file .env berisi: HF_TOKEN=hf_xxxxxxxxx")
+print("=" * 50)
+
+# =========================
 # HUGGINGFACE
 # =========================
 
@@ -118,6 +132,11 @@ def chat():
 
     try:
 
+        # =========================
+        # TAMBAHAN: CETAK PESAN KE TERMINAL
+        # =========================
+        print(f"\n💬 USER: {user_message}")
+
         completion = client.chat.completions.create(
 
             model="meta-llama/Llama-3.3-70B-Instruct",
@@ -134,12 +153,25 @@ def chat():
             "content": bot_reply
         })
 
+        # =========================
+        # TAMBAHAN: CETAK BALASAN KE TERMINAL
+        # =========================
+        print(f"🤖 BOT: {bot_reply[:100]}...")
+
         return jsonify({
             "reply": bot_reply,
             "chat_id": current_chat_id
         })
 
     except Exception as e:
+
+        # =========================
+        # TAMBAHAN: CETAK ERROR LEBIH DETAIL
+        # =========================
+        print("=" * 50)
+        print("❌ ERROR DETAIL:")
+        print(str(e))
+        print("=" * 50)
 
         return jsonify({
             "reply": f"Error: {str(e)}"
@@ -150,6 +182,10 @@ def chat():
 # =========================
 
 if __name__ == "__main__":
+
+    print("=" * 50)
+    print("🐱 ChibiCat AI Server Started")
+    print("=" * 50)
 
     app.run(
         debug=True,
