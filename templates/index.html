@@ -2,7 +2,11 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0c15">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>ChibiCat AI - Neo</title>
     <style>
         * {
@@ -15,6 +19,9 @@
         body {
             background: #0a0c15;
             overflow: hidden;
+            /* TAMBAHAN UNTUK ANDROID */
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y;
         }
 
         /* =========================
@@ -250,6 +257,8 @@
             overflow-y: auto;
             padding: 30px;
             background: linear-gradient(180deg, #0a0c15 0%, #0f111a 100%);
+            /* TAMBAHAN UNTUK ANDROID */
+            -webkit-overflow-scrolling: touch;
         }
 
         .chat-area::-webkit-scrollbar {
@@ -358,7 +367,7 @@
         }
 
         /* =========================
-        RESPONSIVE
+        RESPONSIVE UNTUK ANDROID
         ========================= */
         @media (max-width: 768px) {
             .sidebar {
@@ -376,6 +385,90 @@
             }
             button.send {
                 padding: 0 24px;
+            }
+        }
+
+        /* TAMBAHAN KHUSUS UNTUK ANDROID */
+        @media (max-width: 480px) {
+            .topbar {
+                height: 65px;
+                padding: 0 15px;
+            }
+            .menu-btn {
+                font-size: 24px;
+                margin-right: 12px;
+            }
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+            .title h1 {
+                font-size: 18px;
+            }
+            .title p {
+                font-size: 10px;
+            }
+            .chat-area {
+                padding: 15px;
+            }
+            .message {
+                padding: 10px 14px;
+                font-size: 14px;
+                max-width: 95%;
+            }
+            .input-area {
+                padding: 10px 15px;
+                gap: 10px;
+            }
+            input {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            button.send {
+                padding: 0 18px;
+                font-size: 14px;
+            }
+            .sidebar {
+                width: 80%;
+                padding: 20px 15px;
+            }
+            .sidebar-logo {
+                width: 45px;
+                height: 45px;
+                font-size: 24px;
+            }
+            .sidebar h2 {
+                font-size: 22px;
+            }
+            .new-chat {
+                padding: 12px;
+                font-size: 14px;
+            }
+            .history-item {
+                padding: 12px 15px;
+                font-size: 13px;
+            }
+        }
+
+        /* TAMBAHAN UNTUK LANDSCAPE MODE ANDROID */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .topbar {
+                height: 55px;
+            }
+            .chat-area {
+                padding: 10px 20px;
+            }
+            .message {
+                margin-bottom: 10px;
+            }
+            .input-area {
+                padding: 8px 15px;
+            }
+            input {
+                padding: 10px 16px;
+            }
+            button.send {
+                padding: 0 20px;
             }
         }
     </style>
@@ -550,7 +643,7 @@
 
         const chatArea = document.getElementById("chatArea")
 
-        chatArea.innerHTML += `<div class="message user">${message}</div>`
+        chatArea.innerHTML += `<div class="message user">${escapeHtml(message)}</div>`
         input.value = ""
         chatArea.scrollTop = chatArea.scrollHeight
 
@@ -561,7 +654,7 @@
                 body: JSON.stringify({ message: message })
             })
             const data = await response.json()
-            chatArea.innerHTML += `<div class="message bot">${data.reply}</div>`
+            chatArea.innerHTML += `<div class="message bot">${escapeHtml(data.reply)}</div>`
             chatArea.scrollTop = chatArea.scrollHeight
             loadChats()
         } catch (error) {
@@ -569,13 +662,68 @@
         }
     }
 
+    // TAMBAHAN: Fungsi untuk menghindari XSS dan support emoji di Android
+    function escapeHtml(text) {
+        const div = document.createElement('div')
+        div.textContent = text
+        return div.innerHTML
+    }
+
+    // TAMBAHAN: Fix untuk keyboard Android
+    function fixAndroidKeyboard() {
+        const input = document.getElementById("messageInput")
+        if (input) {
+            input.addEventListener("focus", function() {
+                setTimeout(() => {
+                    document.querySelector('.chat-area').scrollTop = document.querySelector('.chat-area').scrollHeight
+                }, 300)
+            })
+        }
+    }
+
+    // TAMBAHAN: Deteksi Android dan tambah kelas khusus
+    function detectAndroid() {
+        const userAgent = navigator.userAgent.toLowerCase()
+        const isAndroid = userAgent.indexOf("android") > -1
+        
+        if (isAndroid) {
+            document.body.classList.add("android-device")
+            console.log("✅ Android device detected - optimized layout")
+        }
+    }
+
     document.getElementById("messageInput").addEventListener("keypress", function(e) {
         if (e.key === "Enter") sendMessage()
     })
 
+    // TAMBAHAN: Swipe gesture untuk Android (geser kanan buka sidebar)
+    let touchStartX = 0
+    let touchEndX = 0
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX
+    }, false)
+    
+    document.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX
+        const swipeDistance = touchEndX - touchStartX
+        
+        // Geser kanan lebih dari 50px untuk buka sidebar
+        if (swipeDistance > 50 && touchStartX < 50) {
+            openSidebar()
+        }
+        
+        // Geser kiri lebih dari 50px untuk tutup sidebar
+        if (swipeDistance < -50) {
+            closeSidebar()
+        }
+    }, false)
+
     // Inisialisasi logo saat halaman load
     initLogos()
     loadChats()
+    detectAndroid()
+    fixAndroidKeyboard()
 </script>
 
 </body>
