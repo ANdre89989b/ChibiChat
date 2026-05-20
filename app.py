@@ -26,9 +26,7 @@ print("=" * 50)
 # HUGGINGFACE
 # =========================
 
-client = InferenceClient(
-    api_key=os.getenv("HF_TOKEN")
-)
+client = InferenceClient(token=os.getenv("API_KEY"))
 
 # =========================
 # CHAT STORAGE
